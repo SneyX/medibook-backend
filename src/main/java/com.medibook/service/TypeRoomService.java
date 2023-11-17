@@ -1,7 +1,6 @@
 package com.medibook.service;
 
 
-import com.medibook.entities.Room;
 import com.medibook.entities.Typeroom;
 import com.medibook.exceptions.ResourceNotFoundException;
 import com.medibook.repository.TypeRoomRepository;

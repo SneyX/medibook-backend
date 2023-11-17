@@ -1,6 +1,7 @@
 package com.medibook.controller.request;
 
 
+import com.medibook.entities.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -8,8 +9,6 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -35,5 +34,5 @@ public class CreateUserDTO {
     @NotBlank
     private String password;
 
-    private Set<String> roles;
+    private Role role;
 }

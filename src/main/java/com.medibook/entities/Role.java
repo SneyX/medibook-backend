@@ -1,6 +1,6 @@
 package com.medibook.entities;
 
-public enum ERole {
+public enum Role {
     ADMIN,
     USER
 }

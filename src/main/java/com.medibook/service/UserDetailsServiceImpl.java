@@ -1,6 +1,7 @@
 package com.medibook.service;
 
 
+
 import com.medibook.entities.UserEntity;
 import com.medibook.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,32 +13,34 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
+
+    private final UserRepository userRepository;
     @Autowired
-    private UserRepository userRepository;
+    public UserDetailsServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        UserEntity userEntity = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("El usuario " + username + " no existe."));
+       UserEntity userEntity = userRepository.findByUsername(username);
 
-        Collection<? extends GrantedAuthority> authorities = userEntity.getRoles()
-                .stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_".concat(role.getName().name())))
-                .collect(Collectors.toSet());
-
-        return new User(userEntity.getUsername(),
-                userEntity.getPassword(),
-                true,
-                true,
-                true,
-                true,
-                authorities);
+       if (userEntity!=null) {
+           List<GrantedAuthority> permisos = new ArrayList();
+           GrantedAuthority p = new SimpleGrantedAuthority("ROLE_" + userEntity.getRole().toString());
+           permisos.add(p);
+          return new User(userEntity.getUsername(),userEntity.getPassword(),permisos);
+       }else{
+       return null;
+       }
     }
 }
+

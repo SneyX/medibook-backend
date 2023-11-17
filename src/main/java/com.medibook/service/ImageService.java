@@ -8,13 +8,10 @@ import com.medibook.entities.Typeroom;
 import com.medibook.exceptions.ResourceNotFoundException;
 import com.medibook.repository.ImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;

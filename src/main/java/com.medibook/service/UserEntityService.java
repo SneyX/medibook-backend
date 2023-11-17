@@ -1,20 +1,26 @@
 package com.medibook.service;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.medibook.controller.request.CreateUserDTO;
+import com.medibook.entities.Role;
 import com.medibook.entities.UserEntity;
 import com.medibook.exceptions.ResourceNotFoundException;
 import com.medibook.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserEntityService {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    ObjectMapper mapper;
 
     private final static Logger logger = Logger.getLogger(RoomService.class);
 
@@ -56,6 +62,7 @@ public class UserEntityService {
 
         logger.info("Se consulta todos los usuarios");
 
+
         return userEntities;
     }
 
@@ -72,13 +79,13 @@ public class UserEntityService {
         logger.info("Se elimina el usuario con Id: " + id);
     }
 
-    public Optional<UserEntity> searchByUsername(String username) throws ResourceNotFoundException {
-        Optional<UserEntity> userEntity = userRepository.findByUsername(username);
+    public UserEntity searchByUsername(String username) throws ResourceNotFoundException {
+        UserEntity userEntity = userRepository.findByUsername(username);
 
 
-        if (userEntity.isPresent()) {
+        if (!userEntity.getName().equals(username)) {
 
-            logger.info("Se consulta por nombre d eusuario: " + userEntity.get().getName());
+            logger.info("Se consulta por nombre de usuario: " + userEntity.getName());
 
         } else{
 
@@ -102,6 +109,28 @@ public class UserEntityService {
             throw  new ResourceNotFoundException("No existe el usuario con ese id: " + id);
         }
         return userEntity;
+    }
+@Transactional
+    public void cambiarRol (String id) throws ResourceNotFoundException {
+
+        Optional<UserEntity> respuesta = userRepository.findById(Long.parseLong(id));
+
+        if(!respuesta.isPresent()) {
+
+            throw new ResourceNotFoundException("No existe el usuario con ese id: " + id);
+
+        }
+        UserEntity userEntity = respuesta.get();
+
+        if(userEntity.getRole().equals(Role.USER)){
+
+            userEntity.setRole(Role.ADMIN);
+
+
+        }else if(userEntity.getRole().equals(Role.ADMIN)){
+
+            userEntity.setRole(Role.USER);
+        }
     }
 
 }

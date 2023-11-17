@@ -1,5 +1,6 @@
 package com.medibook.controller;
 
+import com.medibook.controller.request.CreateUserDTO;
 import com.medibook.entities.UserEntity;
 import com.medibook.exceptions.ResourceNotFoundException;
 import com.medibook.service.UserEntityService;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 
 @RestController
@@ -65,11 +67,20 @@ public class UserEntityController {
             throw  new ResourceNotFoundException("El Id debe se numérico");
         }
     }
+
+    @GetMapping("/modificarRol/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<String> cambiarRol(@PathVariable String id) throws ResourceNotFoundException {
+        userEntityService.cambiarRol(id);
+        return ResponseEntity.status(HttpStatus.OK).body("El rol ha sido modificado");
+
+    }
+
     @GetMapping("/username/{username}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-    public ResponseEntity<Optional<UserEntity>> searchByUsername (@PathVariable String username) throws ResourceNotFoundException{
-        Optional<UserEntity> userEntity = userEntityService.searchByUsername(username);
-        if(!userEntity.get().getUsername().isEmpty()){
+    public ResponseEntity<UserEntity> searchByUsername (@PathVariable String username) throws ResourceNotFoundException{
+        UserEntity userEntity = userEntityService.searchByUsername(username);
+        if(!userEntity.getUsername().isEmpty()){
             return ResponseEntity.ok(userEntity);
         } else {
             throw new ResourceNotFoundException("El Usuario con el nombre " + username + "no existe" );
