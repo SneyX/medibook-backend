@@ -1,5 +1,5 @@
-FROM eclipse-temurin:17-jdk-alpine
-WORKDIR /app
-COPY target/medibook-backend.jar medibook-backend.jar
+FROM openjdk:17
 EXPOSE 8090
-CMD ["java", "-jar", "medibook-backend.jar"]
+ARG JAR_FILE=target/medibook-backend.jar
+ADD ${JAR_FILE} app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]
