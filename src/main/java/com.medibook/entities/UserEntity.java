@@ -19,7 +19,7 @@ import java.util.Collections;
 @Builder
 @Entity
 @Table(name = "user")
-public class UserEntity implements UserDetails {
+public class UserEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -112,7 +112,7 @@ public class UserEntity implements UserDetails {
         this.role = role;
     }
 
-    @Override
+    /*@Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
         SimpleGrantedAuthority grantedAuthority = new SimpleGrantedAuthority(role.name());
@@ -150,5 +150,5 @@ public class UserEntity implements UserDetails {
                 ", password='" + password + '\'' +
                 ", role=" + role +
                 '}';
-    }
+    }*/
 }
