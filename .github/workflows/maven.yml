@@ -40,3 +40,32 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: sneyx/medibook-backend:latest
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Set permissions for private key
+        run: |
+          echo ${{ secrets.AWS_PRIVATE_KEY }} > key.pem
+          chmod 600 key.pem
+      - name: Pull Docker image
+        run: |
+          ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@54.196.13.40 'sudo docker pull sneyx/medibook-backend:latest'
+      - name: Stop running container
+        run: |
+          ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@54.196.13.40 'sudo docker stop medibook-backend || true'
+          ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@54.196.13.40 'sudo docker rm medibook-backend || true'
+      - name: Run new container
+        run: |
+          ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@54.196.13.40 'sudo docker run -d - name medibook-backend -p 80:8090 sneyx/medibook-backend:latest'
+          
+        
