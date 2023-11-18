@@ -60,9 +60,9 @@ jobs:
           username:  ${{ secrets.EC2_USERNAME }}
           key:  ${{ secrets.AWS_PRIVATE_KEY }}
           script: |
-            docker stop medibook-backend || true
-            docker rm medibook-backend || true
-            docker pull sneyx/medibook-backend:latest
-            docker run -d --name medibook-backend p 80:8090 sneyx/medibook-backend:latest
+            sudo docker stop medibook-backend || true
+            sudo docker rm medibook-backend || true
+            sudo docker pull sneyx/medibook-backend:latest
+            sudo docker run -d --name medibook-backend p 80:8090 sneyx/medibook-backend:latest
         
         
