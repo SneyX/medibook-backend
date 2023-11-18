@@ -63,6 +63,6 @@ jobs:
             sudo docker stop medibook-backend || true
             sudo docker rm medibook-backend || true
             sudo docker pull sneyx/medibook-backend:latest
-            sudo docker run -d --name medibook-backend -p 80:8090 sneyx/medibook-backend:latest
+            sudo docker run -d --name medibook-backend -p 8090:8090 sneyx/medibook-backend:latest
         
         
