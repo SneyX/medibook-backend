@@ -57,7 +57,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Set permissions for private key
         run: |
-          echo ${{ secrets.AWS_PRIVATE_KEY }} > key.pem
+          echo -n ${{ secrets.AWS_PRIVATE_KEY }} > key.pem
           chmod 600 key.pem
       - name: Pull Docker image
         run: |
@@ -68,6 +68,6 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@54.196.13.40 'sudo docker rm medibook-backend || true'
       - name: Run new container
         run: |
-          ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@54.196.13.40 'sudo docker run -d - name medibook-backend -p 80:8090 sneyx/medibook-backend:latest'
+          ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@54.196.13.40 'sudo docker run -d --name medibook-backend -p 80:8090 sneyx/medibook-backend:latest'
           
         
