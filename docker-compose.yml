@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  backend:
+    image: sneyx/medibook-backend:latest
+    container_name: medibook-backend
+    restart: always
+    ports:
+      - "8090:8090"
+
+# Docker Compose
