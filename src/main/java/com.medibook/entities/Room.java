@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -14,7 +15,7 @@ public class Room {
     private Long id;
     private String name;
     private String description;
-    private Boolean favourite;
+
 
     @OneToMany(mappedBy = "room")
     @JsonIgnore
@@ -36,28 +37,32 @@ public class Room {
     )
     private Set<Characteristic> characteristics = new HashSet<>();
 
+    @JsonIgnore
+    @ManyToMany(mappedBy = "roomsFavorite")
+    private Set<UserEntity> userEntities;
+
     public Room() {
     }
 
-    public Room(Long id, String name, String description, Boolean favourite, Set<Booking> bookings, Set<Image> images, Typeroom typeroom, Set<Characteristic> characteristics) {
+    public Room(Long id, String name, String description, Set<Booking> bookings, Set<Image> images, Typeroom typeroom, Set<Characteristic> characteristics,Set<UserEntity> userEntities) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.favourite = favourite;
         this.bookings = bookings;
         this.images = images;
         this.typeroom = typeroom;
         this.characteristics = characteristics;
+        this.userEntities=userEntities;
     }
 
-    public Room(String name, String description, Boolean favourite, Set<Booking> bookings, Set<Image> images, Typeroom typeroom, Set<Characteristic> characteristics) {
+    public Room(String name, String description, Set<Booking> bookings, Set<Image> images, Typeroom typeroom, Set<Characteristic> characteristics,Set<UserEntity> userEntities) {
         this.name = name;
         this.description = description;
-        this.favourite = favourite;
         this.bookings = bookings;
         this.images = images;
         this.typeroom = typeroom;
         this.characteristics = characteristics;
+        this.userEntities=userEntities;
     }
 
     public Long getId() {
@@ -82,14 +87,6 @@ public class Room {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Boolean getFavourite() {
-        return favourite;
-    }
-
-    public void setFavourite(Boolean favourite) {
-        this.favourite = favourite;
     }
 
     public Set<Booking> getBookings() {
@@ -122,5 +119,30 @@ public class Room {
 
     public void setCharacteristics(Set<Characteristic> characteristics) {
         this.characteristics = characteristics;
+    }
+
+    public Set<UserEntity> getUserEntities() {
+        return userEntities;
+    }
+
+    public void setUserEntities(Set<UserEntity> userEntities) {
+        this.userEntities = userEntities;
+    }
+
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Room other = (Room) obj;
+        return Objects.equals(id, other.id);
     }
 }

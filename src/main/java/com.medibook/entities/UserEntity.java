@@ -10,10 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.Collections;
-
-
+import java.util.*;
 
 
 @Builder
@@ -44,24 +41,37 @@ public class UserEntity{
     @Enumerated(EnumType.STRING)
     private Role role;
 
+
+    /*@ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)*/
+    @ManyToMany
+    @JoinTable(
+            name = "user_room",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = true),
+            inverseJoinColumns = @JoinColumn(name = "room_id", referencedColumnName = "id", nullable = true)
+    )
+    private List<Room> roomsFavorite = new ArrayList<>();
+
+
     public UserEntity() {
     }
 
-    public UserEntity(String name, String lastname, String username, String password, Role role) {
+    public UserEntity(String name, String lastname, String username, String password, Role role,List<Room> roomsFavorite) {
         this.name = name;
         this.lastname = lastname;
         this.username = username;
         this.password = password;
         this.role = role;
+        this.roomsFavorite = roomsFavorite;
     }
 
-    public UserEntity(Long id, String name, String lastname, String username, String password, Role role) {
+    public UserEntity(Long id, String name, String lastname, String username, String password, Role role,List<Room> roomsFavorite) {
         this.id = id;
         this.name = name;
         this.lastname = lastname;
         this.username = username;
         this.password = password;
         this.role = role;
+        this.roomsFavorite = roomsFavorite;
     }
 
     public Long getId() {
@@ -112,43 +122,31 @@ public class UserEntity{
         this.role = role;
     }
 
-    /*@Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public List<Room> getRooms() {
+        return roomsFavorite;
+    }
 
-        SimpleGrantedAuthority grantedAuthority = new SimpleGrantedAuthority(role.name());
-
-        return Collections.singletonList(grantedAuthority);
+    public void setRooms(List<Room> rooms) {
+        this.roomsFavorite = rooms;
     }
 
     @Override
-    public boolean isAccountNonExpired() {
-        return true;
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        UserEntity other = (UserEntity) obj;
+        return Objects.equals(id, other.id);
     }
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
 
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 
-    @Override
-    public String toString() {
-        return "AppUser{" +
-                "id=" + id +
-                ", nombre='" + name + '\'' +
-                ", lastname='" + lastname + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", role=" + role +
-                '}';
-    }*/
 }

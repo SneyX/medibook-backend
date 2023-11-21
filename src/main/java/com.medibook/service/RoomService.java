@@ -1,6 +1,8 @@
 package com.medibook.service;
 import com.medibook.entities.Characteristic;
+import com.medibook.entities.Role;
 import com.medibook.entities.Room;
+import com.medibook.entities.UserEntity;
 import com.medibook.exceptions.ResourceNotFoundException;
 import com.medibook.repository.RoomRepository;
 import jakarta.transaction.Transactional;
@@ -138,5 +140,29 @@ public class RoomService {
     public void saveImageRoom(Room room){
         roomRepository.save(room);
     }
+
+
+    /*@Transactional
+    public void CheckFavourite (String id) throws ResourceNotFoundException {
+
+        Optional<Room> respuesta = roomRepository.findById(Long.parseLong(id));
+
+        if(!respuesta.isPresent()) {
+
+            throw new ResourceNotFoundException("No existe la sala con ese id: " + id);
+
+        }
+        Room room = respuesta.get();
+
+        if(room.getFavourite().equals(false)){
+
+            room.setFavourite(true);
+
+
+        }else if(room.getFavourite().equals(true)){
+
+            room.setFavourite(false);
+        }
+    }*/
 
 }

@@ -4,23 +4,31 @@ package com.medibook.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.medibook.controller.request.CreateUserDTO;
 import com.medibook.entities.Role;
+import com.medibook.entities.Room;
 import com.medibook.entities.UserEntity;
 import com.medibook.exceptions.ResourceNotFoundException;
+import com.medibook.repository.RoomRepository;
 import com.medibook.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.xml.transform.stream.StreamResult;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class UserEntityService {
+
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
-    ObjectMapper mapper;
+    private RoomRepository roomRepository;
+
+
 
     private final static Logger logger = Logger.getLogger(RoomService.class);
 
@@ -30,7 +38,8 @@ public class UserEntityService {
     }
 
 
-  public void addUser(UserEntity userEntity) {
+
+    public void addUser(UserEntity userEntity) {
 
         UserEntity userEntity1 = registerUser(userEntity);
 
@@ -55,6 +64,7 @@ public class UserEntityService {
             logger.info("Se modifica el usuario con id: " + userEntity1.get().getId());
         }
     }
+
 
     public List<UserEntity> listUserEntitites() throws ResourceNotFoundException {
 
@@ -132,6 +142,42 @@ public class UserEntityService {
             userEntity.setRole(Role.USER);
         }
     }
+
+    public UserEntity assignRoomFavoriteToUserEntity(Room room, Long user_id) {
+
+        UserEntity userEntity = userRepository.findById(user_id).get();
+        List<Room> roomsFavorite = userEntity.getRooms();
+
+
+        List<Room> rooms = roomsFavorite.stream().filter(it -> room.getId() == it.getId()).collect(Collectors.toList());
+
+
+        if (rooms.isEmpty()) {
+            roomsFavorite.add(room);
+        } else {
+            roomsFavorite.remove(room);
+        }
+
+        userEntity.setRooms(roomsFavorite);
+        return userRepository.save(userEntity);
+
+    }
+
+    public List<Room> listUserRoomFavorites(Long user_id) throws ResourceNotFoundException {
+
+        UserEntity userEntity = userRepository.findById(user_id).get();
+        List<Room> roomsFavorite = userEntity.getRooms();
+
+        if(!roomsFavorite.isEmpty()) {
+            return roomsFavorite;
+        }else{
+            throw new ResourceNotFoundException("El usuario con id" +  user_id  + "no tiene salas favoritas.");
+        }
+    }
+
+
+
+
 
 }
 

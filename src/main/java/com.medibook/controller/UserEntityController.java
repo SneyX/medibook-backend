@@ -1,11 +1,13 @@
 package com.medibook.controller;
 
 import com.medibook.controller.request.CreateUserDTO;
+import com.medibook.entities.Room;
 import com.medibook.entities.UserEntity;
 import com.medibook.exceptions.ResourceNotFoundException;
 import com.medibook.service.UserEntityService;
 import com.medibook.util.ValidatorClass;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -102,6 +104,24 @@ public class UserEntityController {
             throw  new ResourceNotFoundException("El Id debe se numérico");
         }
     }
+
+
+    @PutMapping("/{user_id}/favorite_rooms")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    public UserEntity assignRoomFavoriteToUserEntity(@RequestBody Room room, @PathVariable Long user_id) throws ResourceNotFoundException {
+
+    return userEntityService.assignRoomFavoriteToUserEntity(room,user_id);
+    }
+
+    @GetMapping("/list_user_room_favorites/{user_id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    public ResponseEntity<List<Room>> listUserRoomFavorites(@PathVariable Long user_id) throws  ResourceNotFoundException{
+
+        List<Room> rooms = userEntityService.listUserRoomFavorites(user_id);
+
+        return ResponseEntity.ok(rooms);
+    }
+
 
 }
 
