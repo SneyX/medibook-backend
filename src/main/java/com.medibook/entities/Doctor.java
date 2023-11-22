@@ -21,7 +21,7 @@ public class Doctor {
     private Set<Booking> bookings;
 
     @ManyToOne
-    @JoinColumn(name = "specialty_id", nullable = false) // Con que columna en la bdd se va a relacionar.
+    @JoinColumn(name = "specialty_id", nullable = false)
     private Specialty specialty;
 
     public Doctor() {

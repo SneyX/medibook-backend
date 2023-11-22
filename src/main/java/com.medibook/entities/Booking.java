@@ -10,36 +10,33 @@ public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDate date;
+    private String Date; //día
+    private String shift; //turno
 
     @ManyToOne
-    @JoinColumn(name = "doctor_id")
-    private Doctor doctor;
-
-    @ManyToOne
-    @JoinColumn(name = "room_id")
+    @JoinColumn(name = "room_id",nullable = false)
     private Room room;
 
     @ManyToOne
-    @JoinColumn(name = "shift_id")
-    private Shift shift;
+    @JoinColumn(name = "doctor_id",nullable = false)
+    private Doctor doctor;
 
     public Booking() {
     }
 
-    public Booking(LocalDate date, Shift shift, Doctor doctor, Room room) {
-        this.date = date;
+    public Booking(String date, String shift, Room room, Doctor doctor) {
+        Date = date;
         this.shift = shift;
-        this.doctor = doctor;
         this.room = room;
+        this.doctor = doctor;
     }
 
-    public Booking(Long id, LocalDate date, Doctor doctor, Room room, Shift shift) {
+    public Booking(Long id, String date, String shift, Room room, Doctor doctor) {
         this.id = id;
-        this.date = date;
-        this.doctor = doctor;
-        this.room = room;
+        Date = date;
         this.shift = shift;
+        this.room = room;
+        this.doctor = doctor;
     }
 
     public Long getId() {
@@ -50,28 +47,20 @@ public class Booking {
         this.id = id;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public String getDate() {
+        return Date;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setDate(String date) {
+        Date = date;
     }
 
-    public Shift getShift() {
+    public String getShift() {
         return shift;
     }
 
-    public void setShift(Shift shift) {
+    public void setShift(String shift) {
         this.shift = shift;
-    }
-
-    public Doctor getDoctor() {
-        return doctor;
-    }
-
-    public void setDoctor(Doctor doctor) {
-        this.doctor = doctor;
     }
 
     public Room getRoom() {
@@ -80,5 +69,13 @@ public class Booking {
 
     public void setRoom(Room room) {
         this.room = room;
+    }
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
     }
 }
