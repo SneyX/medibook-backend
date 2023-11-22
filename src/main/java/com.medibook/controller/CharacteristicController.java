@@ -20,11 +20,13 @@ public class CharacteristicController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getAllCharacteristics() {
         return new ResponseEntity<>(characteristicService.getAllCharacteristics(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getCharacteristicById(@PathVariable Long id) {
         Characteristic characteristic = characteristicService.getCharacteristicById(id);
         if (characteristic == null) {
@@ -34,6 +36,7 @@ public class CharacteristicController {
     }
 
     @GetMapping("/{name}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Characteristic> getCharacteristicByName(@PathVariable String name) {
         Characteristic characteristic = characteristicService.getCharacteristicByName(name);
         if (characteristic == null) {

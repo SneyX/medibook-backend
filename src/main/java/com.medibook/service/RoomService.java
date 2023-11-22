@@ -27,37 +27,6 @@ public class RoomService {
         return roomRepository.save(room);
     }
 
-    @Transactional
-    public void addRoomWithCharacteristic(Room room, String nameCharacteristic) {
-        try {
-            Optional<Characteristic> optionalCharacteristic = Optional.ofNullable(characteristicService.getCharacteristicByName(nameCharacteristic));
-
-            Characteristic characteristic;
-
-            if (optionalCharacteristic.isEmpty()) {
-                characteristic = new Characteristic();
-                characteristic.setName(nameCharacteristic);
-                // Otras configuraciones de la característica si las hay
-                characteristic = characteristicService.createCharacteristic(characteristic);
-            } else {
-                characteristic = optionalCharacteristic.get();
-            }
-
-            room.getCharacteristics().add(characteristic);
-            characteristic.getRooms().add(room); // Asegura la bidireccionalidad de la relación
-
-            // Guarda la sala en la base de datos junto con la asociación de la característica
-            roomRepository.save(room);
-
-            logger.info("Se ha agregado la sala con id: " + room.getId());
-        } catch (Exception ex) {
-            logger.error("Error al agregar la sala con característica: " + ex.getMessage());
-            // Manejo de excepciones, podrías lanzarlas o manejarlas aquí dependiendo de tu lógica
-        }
-    }
-
-
-
     public void editRoom(Room room) throws ResourceNotFoundException {
 
         String msg = "";

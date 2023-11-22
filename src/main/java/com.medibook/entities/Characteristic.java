@@ -13,6 +13,7 @@ public class Characteristic {
     private String name;
     private String urlicon;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "characteristics")
     private Set<Room> rooms;
 
@@ -63,4 +64,5 @@ public class Characteristic {
     public void setRooms(Set<Room> rooms) {
         this.rooms = rooms;
     }
+
 }
