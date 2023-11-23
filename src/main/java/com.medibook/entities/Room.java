@@ -16,9 +16,8 @@ public class Room {
     private String name;
     private String description;
 
-
-    @OneToMany(mappedBy = "room")
     @JsonIgnore
+    @OneToMany(mappedBy = "room")
     private Set<Booking> bookings;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)

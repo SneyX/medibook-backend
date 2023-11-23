@@ -28,7 +28,7 @@ public class BookingController {
     private DoctorService doctorService;
 
     @PostMapping
-    public ResponseEntity<Booking> registerBooking(Booking booking) throws ResourceNotFoundException {
+    public ResponseEntity<Booking> registerBooking(@RequestBody Booking booking) throws ResourceNotFoundException {
         ResponseEntity<Booking> response;
         Room room = booking.getRoom();
         Doctor doctor = booking.getDoctor();

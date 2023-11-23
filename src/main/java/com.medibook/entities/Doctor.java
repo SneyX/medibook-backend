@@ -16,8 +16,8 @@ public class Doctor {
     private String lastname;
     private String tuition;
 
-    @OneToMany(mappedBy = "doctor")
     @JsonIgnore
+    @OneToMany(mappedBy = "doctor")
     private Set<Booking> bookings;
 
     @ManyToOne

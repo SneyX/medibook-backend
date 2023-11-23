@@ -30,7 +30,6 @@ public class BookingService {
         return bookingRepository.save(booking);
     }
 
-
     //METODO PARA EDITAR/ACTUALIZAR RESERVA
 
     public void editBooking(Booking booking) throws ResourceNotFoundException {
