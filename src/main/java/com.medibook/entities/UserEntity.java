@@ -53,7 +53,7 @@ public class UserEntity{
     private List<Room> roomsFavorite = new ArrayList<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "userEntity")
     private Set<Booking> bookings;
 
 
