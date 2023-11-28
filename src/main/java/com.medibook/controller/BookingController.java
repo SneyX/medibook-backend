@@ -1,16 +1,17 @@
 package com.medibook.controller;
 
 import com.medibook.entities.Booking;
-import com.medibook.entities.Doctor;
 import com.medibook.entities.Room;
+import com.medibook.entities.UserEntity;
 import com.medibook.exceptions.ResourceNotFoundException;
 import com.medibook.service.BookingService;
-import com.medibook.service.DoctorService;
 import com.medibook.service.RoomService;
+import com.medibook.service.UserEntityService;
 import com.medibook.util.ValidatorClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,25 +25,27 @@ public class BookingController {
     private BookingService bookingService;
     @Autowired
     private RoomService roomService;
+
     @Autowired
-    private DoctorService doctorService;
+    private UserEntityService userEntityService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<Booking> registerBooking(@RequestBody Booking booking) throws ResourceNotFoundException {
         ResponseEntity<Booking> response;
         Room room = booking.getRoom();
-        Doctor doctor = booking.getDoctor();
+        UserEntity userEntity = booking.getUserEntity();
         try {
             if (roomService.searchById(room.getId()).isPresent() &&
-                    doctorService.searchById(doctor.getId()).isPresent()) {
+                    userEntityService.searchById(userEntity.getId()).isPresent()) {
                 response = ResponseEntity.ok(bookingService.registerBooking(booking));
                 return response;
             } else if (roomService.searchById(room.getId()).isPresent()) {
                 throw new ResourceNotFoundException("La Sala no está registrada");
-            } else if (doctorService.searchById(doctor.getId()).isPresent()) {
-                throw new ResourceNotFoundException("El Doctor no está registrado");
+            } else if (userEntityService.searchById(userEntity.getId()).isPresent()) {
+                throw new ResourceNotFoundException("El usuario no está registrado");
             } else {
-                throw new ResourceNotFoundException("La sala y el doctor no están registrados");
+                throw new ResourceNotFoundException("La sala y el usuario no están registrados");
             }
         } catch (ResourceNotFoundException e) {
             throw e;
@@ -52,6 +55,7 @@ public class BookingController {
     }
 
     @PutMapping()
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<?> editBooking(@RequestBody Booking booking) throws ResourceNotFoundException {
 
         bookingService.editBooking(booking);
@@ -60,6 +64,7 @@ public class BookingController {
     }
 
     @GetMapping("/listbookings")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<List<Booking>> listBookings() throws  ResourceNotFoundException{
 
         List<Booking> bookings = bookingService.listBookings();
@@ -68,6 +73,7 @@ public class BookingController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<Optional<Booking>> searchBookingById(@PathVariable String id) throws  ResourceNotFoundException{
         Optional<Booking> booking = bookingService.searchBookingById(Long.parseLong(id));
         if(ValidatorClass.isNumeric(id)){
@@ -81,6 +87,7 @@ public class BookingController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<String> deleteBooking(@PathVariable String id) throws ResourceNotFoundException {
 
         if(ValidatorClass.isNumeric(id)){

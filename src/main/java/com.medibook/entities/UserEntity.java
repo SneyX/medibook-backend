@@ -1,5 +1,6 @@
 package com.medibook.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -51,20 +52,25 @@ public class UserEntity{
     )
     private List<Room> roomsFavorite = new ArrayList<>();
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private Set<Booking> bookings;
+
 
     public UserEntity() {
     }
 
-    public UserEntity(String name, String lastname, String username, String password, Role role,List<Room> roomsFavorite) {
+    public UserEntity(String name, String lastname, String username, String password, Role role, List<Room> roomsFavorite, Set<Booking> bookings) {
         this.name = name;
         this.lastname = lastname;
         this.username = username;
         this.password = password;
         this.role = role;
         this.roomsFavorite = roomsFavorite;
+        this.bookings = bookings;
     }
 
-    public UserEntity(Long id, String name, String lastname, String username, String password, Role role,List<Room> roomsFavorite) {
+    public UserEntity(Long id, String name, String lastname, String username, String password, Role role, List<Room> roomsFavorite, Set<Booking> bookings) {
         this.id = id;
         this.name = name;
         this.lastname = lastname;
@@ -72,6 +78,7 @@ public class UserEntity{
         this.password = password;
         this.role = role;
         this.roomsFavorite = roomsFavorite;
+        this.bookings = bookings;
     }
 
     public Long getId() {
@@ -128,6 +135,14 @@ public class UserEntity{
 
     public void setRooms(List<Room> rooms) {
         this.roomsFavorite = rooms;
+    }
+
+    public Set<Booking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(Set<Booking> bookings) {
+        this.bookings = bookings;
     }
 
     @Override

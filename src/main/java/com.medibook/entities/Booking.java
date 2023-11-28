@@ -18,25 +18,25 @@ public class Booking {
     private Room room;
 
     @ManyToOne
-    @JoinColumn(name = "doctor_id",nullable = false)
-    private Doctor doctor;
+    @JoinColumn(name = "user_id",nullable = false)
+    private UserEntity userEntity;
 
     public Booking() {
     }
 
-    public Booking(String date, String shift, Room room, Doctor doctor) {
+    public Booking(String date, String shift, Room room, UserEntity userEntity) {
         Date = date;
         this.shift = shift;
         this.room = room;
-        this.doctor = doctor;
+        this.userEntity = userEntity;
     }
 
-    public Booking(Long id, String date, String shift, Room room, Doctor doctor) {
+    public Booking(Long id, String date, String shift, Room room, UserEntity userEntity) {
         this.id = id;
         Date = date;
         this.shift = shift;
         this.room = room;
-        this.doctor = doctor;
+        this.userEntity = userEntity;
     }
 
     public Long getId() {
@@ -71,11 +71,11 @@ public class Booking {
         this.room = room;
     }
 
-    public Doctor getDoctor() {
-        return doctor;
+    public UserEntity getUserEntity() {
+        return userEntity;
     }
 
-    public void setDoctor(Doctor doctor) {
-        this.doctor = doctor;
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 }

@@ -3,8 +3,8 @@ package com.medibook.service;
 import com.medibook.entities.Booking;
 import com.medibook.exceptions.ResourceNotFoundException;
 import com.medibook.repository.BookingRepository;
-import com.medibook.repository.DoctorRepository;
 import com.medibook.repository.RoomRepository;
+import com.medibook.repository.UserRepository;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,8 @@ public class BookingService {
     private RoomRepository roomRepository;
 
     @Autowired
-    private DoctorRepository doctorRepository;
+    private UserRepository userRepository;
+
 
     private final static Logger logger = Logger.getLogger(BookingService.class);
 
