@@ -41,7 +41,7 @@ public class UserEntity{
     private Role role;
 
 
-    /*@ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)*/
+
     @ManyToMany
     @JoinTable(
             name = "user_room",
@@ -50,13 +50,13 @@ public class UserEntity{
     )
     private List<Room> roomsFavorite = new ArrayList<>();
 
-    @ManyToMany
+   /* @ManyToMany
     @JoinTable(
             name = "review_room_user",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id",nullable = true),
             inverseJoinColumns = @JoinColumn(name = "review_id", referencedColumnName = "id",nullable = true)
     )
-    private Set<Review> reviews = new HashSet<>();
+    private Set<Review> reviews = new HashSet<>();*/
 
     @JsonIgnore
     @OneToMany(mappedBy = "userEntity")
@@ -67,7 +67,7 @@ public class UserEntity{
     }
 
 
-    public UserEntity(String name, String lastname, String username, String password, Role role,List<Room> roomsFavorite,Set<Review> reviews, Set<Booking> bookings) {
+    public UserEntity(String name, String lastname, String username, String password, Role role,List<Room> roomsFavorite/*,Set<Review> reviews*/, Set<Booking> bookings) {
         this.name = name;
         this.lastname = lastname;
         this.username = username;
@@ -75,11 +75,11 @@ public class UserEntity{
         this.role = role;
         this.roomsFavorite = roomsFavorite;
         this.bookings = bookings;
-        this.reviews = reviews;
+        /*this.reviews = reviews;*/
     }
 
 
-    public UserEntity(Long id, String name, String lastname, String username, String password, Role role,List<Room> roomsFavorite,Set<Review> reviews, Set<Booking> bookings) {
+    public UserEntity(Long id, String name, String lastname, String username, String password, Role role,List<Room> roomsFavorite/*,Set<Review> reviews*/, Set<Booking> bookings) {
         this.id = id;
         this.name = name;
         this.lastname = lastname;
@@ -87,7 +87,7 @@ public class UserEntity{
         this.password = password;
         this.role = role;
         this.roomsFavorite = roomsFavorite;
-        this.reviews = reviews;
+        /*this.reviews = reviews;*/
         this.bookings = bookings;
     }
 
@@ -155,13 +155,13 @@ public class UserEntity{
         this.roomsFavorite = roomsFavorite;
     }
 
-    public Set<Review> getReviews() {
+   /* public Set<Review> getReviews() {
         return reviews;
     }
 
     public void setReviews(Set<Review> reviews) {
         this.reviews = reviews;
-    }
+    }*/
 
     public Set<Booking> getBookings() {
         return bookings;
