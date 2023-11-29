@@ -3,13 +3,19 @@ package com.medibook.controller;
 
 import com.medibook.controller.request.CreateUserDTO;
 import com.medibook.entities.Role;
+import com.medibook.entities.Room;
 import com.medibook.entities.UserEntity;
 import com.medibook.repository.UserRepository;
+import com.medibook.service.UserEntityService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class PrincipalController {
@@ -19,6 +25,15 @@ public class PrincipalController {
 
     @Autowired
     private UserRepository userRepository;
+
+
+
+    private UserEntityService userEntityService;
+    @Autowired
+    public PrincipalController(UserEntityService userEntityService){
+
+        this.userEntityService =  userEntityService;
+    }
 
 
 
@@ -32,18 +47,21 @@ public class PrincipalController {
                 .lastname(createUserDTO.getLastname())
                 .role(Role.USER)
                 .build();
+        ;
 
-    //Persisto el usuario y lo retorno
+
+        List<UserEntity> userEntityList = userRepository.findAll();
+
+        List<UserEntity> userEntities = userEntityList.stream().filter(it -> userEntity.getUsername().equals(it.getUsername())).collect(Collectors.toList());
+
+        if(!(userEntities.isEmpty())){
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El username ya existe");
+        }
         userRepository.save(userEntity);
+
 
         return ResponseEntity.ok(userEntity);
     }
 
-    /*@DeleteMapping("/deleteUser")
-    @PreAuthorize("hasRole('ADMIN')")
-    public String deleteUser(@RequestParam String id){
-        userRepository.deleteById(Long.parseLong(id));
-        return "Se ha borrado el user con id ".concat(id);
-
-    }*/
 }

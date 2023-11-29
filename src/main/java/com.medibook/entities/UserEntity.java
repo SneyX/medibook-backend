@@ -7,9 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+
 
 import java.util.*;
 
@@ -52,6 +50,14 @@ public class UserEntity{
     )
     private List<Room> roomsFavorite = new ArrayList<>();
 
+    @ManyToMany
+    @JoinTable(
+            name = "review_room_user",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id",nullable = true),
+            inverseJoinColumns = @JoinColumn(name = "review_id", referencedColumnName = "id",nullable = true)
+    )
+    private Set<Review> reviews = new HashSet<>();
+
     @JsonIgnore
     @OneToMany(mappedBy = "userEntity")
     private Set<Booking> bookings;
@@ -60,7 +66,8 @@ public class UserEntity{
     public UserEntity() {
     }
 
-    public UserEntity(String name, String lastname, String username, String password, Role role, List<Room> roomsFavorite, Set<Booking> bookings) {
+
+    public UserEntity(String name, String lastname, String username, String password, Role role,List<Room> roomsFavorite,Set<Review> reviews, Set<Booking> bookings) {
         this.name = name;
         this.lastname = lastname;
         this.username = username;
@@ -68,9 +75,11 @@ public class UserEntity{
         this.role = role;
         this.roomsFavorite = roomsFavorite;
         this.bookings = bookings;
+        this.reviews = reviews;
     }
 
-    public UserEntity(Long id, String name, String lastname, String username, String password, Role role, List<Room> roomsFavorite, Set<Booking> bookings) {
+
+    public UserEntity(Long id, String name, String lastname, String username, String password, Role role,List<Room> roomsFavorite,Set<Review> reviews, Set<Booking> bookings) {
         this.id = id;
         this.name = name;
         this.lastname = lastname;
@@ -78,6 +87,7 @@ public class UserEntity{
         this.password = password;
         this.role = role;
         this.roomsFavorite = roomsFavorite;
+        this.reviews = reviews;
         this.bookings = bookings;
     }
 
@@ -137,6 +147,22 @@ public class UserEntity{
         this.roomsFavorite = rooms;
     }
 
+    public List<Room> getRoomsFavorite() {
+        return roomsFavorite;
+    }
+
+    public void setRoomsFavorite(List<Room> roomsFavorite) {
+        this.roomsFavorite = roomsFavorite;
+    }
+
+    public Set<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(Set<Review> reviews) {
+        this.reviews = reviews;
+    }
+
     public Set<Booking> getBookings() {
         return bookings;
     }
@@ -147,7 +173,7 @@ public class UserEntity{
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(username);
     }
     @Override
     public boolean equals(Object obj) {
@@ -158,7 +184,7 @@ public class UserEntity{
         if (getClass() != obj.getClass())
             return false;
         UserEntity other = (UserEntity) obj;
-        return Objects.equals(id, other.id);
+        return Objects.equals(username, other.username);
     }
 
 
