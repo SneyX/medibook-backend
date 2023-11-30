@@ -40,9 +40,6 @@ public class BookingController {
         }
 
         if (!userEntityService.searchById(userEntity.getId()).isPresent()) {
-
-            System.out.println(userEntity.toString());
-
             throw new ResourceNotFoundException("El usuario no está registrado");
         }
 
