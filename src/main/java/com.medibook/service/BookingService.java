@@ -65,14 +65,25 @@ public class BookingService {
 
     //METODO PARA LISTAR TODAS LAS RESERVAS DEL USER
 
-    public List<Booking> listBookingsUser(Long id) throws ResourceNotFoundException {
+    /*public List<Booking> listBookingsUser(Long id) throws ResourceNotFoundException {
         List<Booking> bookings = bookingRepository.findAll();
         List<Booking> bookingUser = bookings.stream().filter(it -> id == it.getId()).collect(Collectors.toList());
         List<Booking> bookingStatus = bookingUser.stream().filter(it -> !it.isStatus()).collect(Collectors.toList());
 
         logger.info("Se consultan todas las reservas del usuario con id: " + id);
         return bookingStatus;
+    }*/
+
+    public List<Booking> listBookingsUser(Long id) throws ResourceNotFoundException {
+        List<Booking> bookings = bookingRepository.findAll();
+        List<Booking> bookingUser = bookings.stream().filter(it -> id.equals(it.getUserEntity().getId())).collect(Collectors.toList());
+        List<Booking> bookingStatus = bookingUser.stream().filter(it -> !it.isStatus()).collect(Collectors.toList());
+
+        logger.info("Se consultan todas las reservas del usuario con id: " + id);
+        return bookingStatus;
     }
+
+
 
     //METODO PARA BUSCAR RESERVA X ID
 
