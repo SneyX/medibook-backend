@@ -13,6 +13,8 @@ public class Booking {
     private String Date; //día
     private String shift; //turno
 
+    private boolean status = true; //estado de la reserva
+
     @ManyToOne
     @JoinColumn(name = "room_id",nullable = false)
     private Room room;
@@ -24,17 +26,19 @@ public class Booking {
     public Booking() {
     }
 
-    public Booking(String date, String shift, Room room, UserEntity userEntity) {
+    public Booking(String date, String shift, boolean status, Room room, UserEntity userEntity) {
         Date = date;
         this.shift = shift;
+        this.status = status;
         this.room = room;
         this.userEntity = userEntity;
     }
 
-    public Booking(Long id, String date, String shift, Room room, UserEntity userEntity) {
+    public Booking(Long id, String date, String shift, boolean status, Room room, UserEntity userEntity) {
         this.id = id;
         Date = date;
         this.shift = shift;
+        this.status = status;
         this.room = room;
         this.userEntity = userEntity;
     }
@@ -61,6 +65,16 @@ public class Booking {
 
     public void setShift(String shift) {
         this.shift = shift;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
     public Room getRoom() {
