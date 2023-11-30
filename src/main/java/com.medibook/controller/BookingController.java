@@ -32,23 +32,23 @@ public class BookingController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<Booking> registerBooking(@RequestBody Booking booking) throws ResourceNotFoundException {
-        ResponseEntity<Booking> response;
         Room room = booking.getRoom();
         UserEntity userEntity = booking.getUserEntity();
+
+        if (!roomService.searchById(room.getId()).isPresent()) {
+            throw new ResourceNotFoundException("La Sala no está registrada");
+        }
+
+        if (!userEntityService.searchById(userEntity.getId()).isPresent()) {
+
+            System.out.println(userEntity.toString());
+
+            throw new ResourceNotFoundException("El usuario no está registrado");
+        }
+
         try {
-            if (roomService.searchById(room.getId()).isPresent() &&
-                    userEntityService.searchById(userEntity.getId()).isPresent()) {
-                response = ResponseEntity.ok(bookingService.registerBooking(booking));
-                return response;
-            } else if (roomService.searchById(room.getId()).isPresent()) {
-                throw new ResourceNotFoundException("La Sala no está registrada");
-            } else if (userEntityService.searchById(userEntity.getId()).isPresent()) {
-                throw new ResourceNotFoundException("El usuario no está registrado");
-            } else {
-                throw new ResourceNotFoundException("La sala y el usuario no están registrados");
-            }
-        } catch (ResourceNotFoundException e) {
-            throw e;
+            Booking registeredBooking = bookingService.registerBooking(booking);
+            return ResponseEntity.ok(registeredBooking);
         } catch (Exception e) {
             throw new ResourceNotFoundException("Error al procesar la reserva");
         }
