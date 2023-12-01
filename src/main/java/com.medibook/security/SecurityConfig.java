@@ -51,6 +51,7 @@ public class SecurityConfig {
                     auth.requestMatchers("/rooms/name/{name}").permitAll();
                     auth.requestMatchers("/typerooms/listtyperooms").permitAll();
                     auth.requestMatchers("/typerooms/{id}").permitAll();
+                    auth.requestMatchers("/bookings/listbookings").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .sessionManagement(session -> {

@@ -73,7 +73,6 @@ public class BookingController {
     }
 
     @GetMapping("/listbookings")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<List<Booking>> listBookings() throws  ResourceNotFoundException{
 
         List<Booking> bookings = bookingService.listBookings();
