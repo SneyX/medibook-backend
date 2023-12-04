@@ -128,6 +128,19 @@ public class Room {
         this.userEntities = userEntities;
     }
 
+    @Override
+    public String toString() {
+        return "Room{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", bookings=" + bookings +
+                ", images=" + images +
+                ", typeroom=" + typeroom +
+                ", characteristics=" + characteristics +
+                ", userEntities=" + userEntities +
+                '}';
+    }
 
     @Override
     public int hashCode() {

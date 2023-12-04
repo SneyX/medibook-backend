@@ -139,13 +139,7 @@ public class UserEntity{
         this.role = role;
     }
 
-    public List<Room> getRooms() {
-        return roomsFavorite;
-    }
 
-    public void setRooms(List<Room> rooms) {
-        this.roomsFavorite = rooms;
-    }
 
     public List<Room> getRoomsFavorite() {
         return roomsFavorite;

@@ -146,7 +146,7 @@ public class UserEntityService {
     public UserEntity assignRoomFavoriteToUserEntity(Room room, Long user_id) {
 
         UserEntity userEntity = userRepository.findById(user_id).get();
-        List<Room> roomsFavorite = userEntity.getRooms();
+        List<Room> roomsFavorite = userEntity.getRoomsFavorite();
 
 
         List<Room> rooms = roomsFavorite.stream().filter(it -> room.getId() == it.getId()).collect(Collectors.toList());
@@ -158,7 +158,7 @@ public class UserEntityService {
             roomsFavorite.remove(room);
         }
 
-        userEntity.setRooms(roomsFavorite);
+        userEntity.setRoomsFavorite(roomsFavorite);
         return userRepository.save(userEntity);
 
     }
@@ -166,7 +166,7 @@ public class UserEntityService {
     public List<Room> listUserRoomFavorites(Long user_id) throws ResourceNotFoundException {
 
         UserEntity userEntity = userRepository.findById(user_id).get();
-        List<Room> roomsFavorite = userEntity.getRooms();
+        List<Room> roomsFavorite = userEntity.getRoomsFavorite();
 
         if(!roomsFavorite.isEmpty()) {
             return roomsFavorite;

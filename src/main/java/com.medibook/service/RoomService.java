@@ -1,24 +1,38 @@
 package com.medibook.service;
-import com.medibook.entities.Characteristic;
-import com.medibook.entities.Role;
-import com.medibook.entities.Room;
-import com.medibook.entities.UserEntity;
+import com.medibook.entities.*;
 import com.medibook.exceptions.ResourceNotFoundException;
+import com.medibook.repository.BookingRepository;
 import com.medibook.repository.RoomRepository;
+import com.medibook.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.hibernate.query.sqm.CastType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.apache.log4j.Logger;
+
+import java.util.AbstractList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
 public class RoomService {
     @Autowired
     private RoomRepository roomRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private BookingRepository bookingRepository;
+
     @Autowired
     private CharacteristicService characteristicService;
+
+    @Autowired
+    private BookingService bookingService;
 
     private final static Logger logger = Logger.getLogger(RoomService.class);
 
@@ -59,6 +73,30 @@ public class RoomService {
     //Método para eliminar sala por Id.
 
     public void deleteRoom(Long id) throws ResourceNotFoundException {
+
+        List<UserEntity> userEntities = userRepository.findAll();
+        List<Booking>bookings = bookingRepository.findAll();
+
+        for (UserEntity userEntity: userEntities) {
+            List<Room> rooms = userEntity.getRoomsFavorite();
+            List<Room> roomsAux = new ArrayList();
+            for (Room room1 : rooms) {
+                if(!(room1.getId().equals(id))){
+
+                   roomsAux.add(room1);
+                }
+            }
+            userEntity.setRoomsFavorite(roomsAux);
+        }
+
+
+        for (Booking booking : bookings) {
+            Room room = booking.getRoom();
+            Room roomaux;
+                if(room.getId().equals(id)){
+                    bookingService.deleteBooking(booking.getId());
+                }
+        }
 
         if (roomRepository.findById(id).isEmpty())
 
@@ -109,29 +147,5 @@ public class RoomService {
     public void saveImageRoom(Room room){
         roomRepository.save(room);
     }
-
-
-    /*@Transactional
-    public void CheckFavourite (String id) throws ResourceNotFoundException {
-
-        Optional<Room> respuesta = roomRepository.findById(Long.parseLong(id));
-
-        if(!respuesta.isPresent()) {
-
-            throw new ResourceNotFoundException("No existe la sala con ese id: " + id);
-
-        }
-        Room room = respuesta.get();
-
-        if(room.getFavourite().equals(false)){
-
-            room.setFavourite(true);
-
-
-        }else if(room.getFavourite().equals(true)){
-
-            room.setFavourite(false);
-        }
-    }*/
 
 }
