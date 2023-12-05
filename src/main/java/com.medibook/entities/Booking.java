@@ -13,6 +13,8 @@ public class Booking {
     private String Date; //día
     private String shift; //turno
 
+    private String dateBooking; //fecha en la que se hizo la reserva
+
     private boolean status = true; //estado de la reserva
 
     @ManyToOne
@@ -26,18 +28,20 @@ public class Booking {
     public Booking() {
     }
 
-    public Booking(String date, String shift, boolean status, Room room, UserEntity userEntity) {
+    public Booking(String date, String shift, String dateBooking, boolean status, Room room, UserEntity userEntity) {
         Date = date;
         this.shift = shift;
+        this.dateBooking = dateBooking;
         this.status = status;
         this.room = room;
         this.userEntity = userEntity;
     }
 
-    public Booking(Long id, String date, String shift, boolean status, Room room, UserEntity userEntity) {
+    public Booking(Long id, String date, String shift, String dateBooking, boolean status, Room room, UserEntity userEntity) {
         this.id = id;
         Date = date;
         this.shift = shift;
+        this.dateBooking = dateBooking;
         this.status = status;
         this.room = room;
         this.userEntity = userEntity;
@@ -71,7 +75,13 @@ public class Booking {
         return status;
     }
 
+    public String getDateBooking() {
+        return dateBooking;
+    }
 
+    public void setDateBooking(String dateBooking) {
+        this.dateBooking = dateBooking;
+    }
 
     public void setStatus(boolean status) {
         this.status = status;
