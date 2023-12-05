@@ -37,6 +37,7 @@ public class BookingController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<Booking> registerBooking(@RequestBody Booking booking) throws ResourceNotFoundException {
+
         Room room = booking.getRoom();
         UserEntity userEntity = booking.getUserEntity();
         List<Booking> bookings = bookingRepository.findAll();
@@ -50,9 +51,11 @@ public class BookingController {
         }
 
         try {
-            List<Booking> bookingDate = bookings.stream().filter(it -> booking.getDate().equals(it.getDate())).collect(Collectors.toList());
-            List<Booking> bookingShift = bookingDate.stream().filter(it -> booking.getShift().equals(it.getShift())).collect(Collectors.toList());
-            if (bookingShift.isEmpty()){
+            List<Booking> bookingSearch = bookings.stream().filter(it -> booking.getDate().equals(it.getDate())
+                    && booking.getShift().equals(it.getShift())
+                    && room.getId().equals(it.getRoom().getId())).collect(Collectors.toList());
+
+            if (bookingSearch.isEmpty()){
                 Booking registeredBooking = bookingService.registerBooking(booking);
                 return ResponseEntity.ok(registeredBooking);
             } else{
